@@ -54,6 +54,18 @@ The 9 classes are:
 Insight:
 - The dataset is strongly imbalanced, with some classes having many more examples than others. This makes minority-class prediction more difficult and increases the importance of using evaluation metrics beyond accuracy.
 
+### RGB Intensity Distributions
+![Red Intensity Distribution](5.%20Images/ML%20Data%20Viz/Red%20instensity.png)
+
+![Green Intensity Distribution](5.%20Images/ML%20Data%20Viz/Green%20intensity.png)
+
+![Blue Intensity Distribution](5.%20Images/ML%20Data%20Viz/Blue%20Intensity.png)
+
+Insight:
+- The red, green, and blue intensity distributions show how lesion classes differ in channel-level color behavior.
+- These visual differences support the use of RGB histogram features in the machine learning pipeline.
+- Overlap across some color distributions helps explain why certain lesion classes remain difficult to separate perfectly.
+
 ### Modeling Pipeline
 ![Modeling Pipeline](5.%20Images/ML%20Data%20Viz/Modeling%20Pipeline.png)
 
@@ -158,7 +170,7 @@ Interpretation summary:
 This project shows that feature-based machine learning can classify skin lesion images effectively while remaining interpretable. Random Forest and XGBoost both performed well on tabular features extracted from dermoscopic images, and interpretation tools helped explain what drove the predictions.
 
 ## 13. Future Work
-- Expand medically informed feature engineering using ABCD-style lesion features
+- Expand medically informed feature engineering using ABCD-style features
 - Improve minority-class performance further
 - Continue refining preprocessing and feature selection
 - Compare against stronger deep learning baselines
