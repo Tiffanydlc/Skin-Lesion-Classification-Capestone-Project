@@ -1,16 +1,26 @@
 # Skin Lesion Classification Capstone Project
 
-## Project Overview
-This repository contains my DATA 4382 capstone project on skin lesion classification. The goal of this project is to classify skin lesion images into 9 diagnostic classes using image preprocessing, feature engineering, and machine learning models.
+## 1. Project Title
+Skin Lesion Classification Using Classical Computer Vision, Random Forest, and XGBoost
 
-The project compares two tree-based machine learning approaches:
-- Random Forest
-- XGBoost
+## 2. Business Problem / Motivation
+Early skin cancer detection matters because it can improve patient outcomes and support faster clinical decision-making. This project explores whether interpretable, feature-based machine learning can classify dermoscopic skin lesion images effectively, especially in a setting with limited data and strong class imbalance.
 
-These models were trained on tabular features extracted from dermoscopic images and evaluated using visual and quantitative performance metrics. Earlier project phases also compared the feature-based pipeline against a MobileNetV2 deep learning baseline to study how classical machine learning behaves under limited data and class imbalance.
+## 3. Project Overview
+This project classifies 9 skin lesion classes using a classical computer vision pipeline. Images are preprocessed, converted into tabular features, and then modeled with Random Forest and XGBoost. The main result is that the tree-based models performed strongly on structured image-derived features and provided useful interpretability through feature importance, permutation importance, and SHAP.
 
-## Dataset
-The dataset includes 9 lesion classes:
+## 4. Data
+- Source: [Kaggle Skin Cancer ISIC Dataset](https://www.kaggle.com/datasets/nodoubttome/skin-cancer9-classesisic/data)
+- Type: Dermoscopic image dataset converted into structured tabular features for modeling
+- Size: 2,357 images across 9 classes
+- Main file in this repository: `1. Data/SC_Dataset_9_Classes.csv`
+- Key features:
+  - RGB color histogram features
+  - Haralick texture features
+  - Edge-based features
+  - Shape-inspired features such as asymmetry, border irregularity, radius, area, and rectangle-based measurements
+
+The 9 classes are:
 - Pigmented benign keratosis
 - Melanoma
 - Basal cell carcinoma
@@ -21,156 +31,186 @@ The dataset includes 9 lesion classes:
 - Dermatofibroma
 - Seborrheic keratosis
 
-Main dataset file:
-- `1. Data/SC_Dataset_9_Classes.csv`
+## 5. Data Preprocessing
+- Cleaning steps:
+  - Organized image and tabular data into a reproducible project structure
+  - Applied image preprocessing before feature extraction
+- Handling missing values:
+  - Median imputation was used inside the machine learning pipeline through `SimpleImputer`
+  - The tabular dataset was also checked for null values during analysis
+- Feature engineering:
+  - Extracted histogram-based color features
+  - Extracted Haralick texture features
+  - Added shape and lesion-geometry features
+  - Added contrast and color-ratio style features for improved class separation
+- Hair removal:
+  - Replaced an earlier slower and less stable filter with DullRazor
+  - Improved preprocessing speed and reduced image corruption
 
-Sample images are stored in:
-- `1. Data/sample_images/`
-
-## Project Workflow
-The overall modeling workflow is shown below.
-
-![Modeling Pipeline](5.%20Images/ML%20Data%20Viz/Modeling%20Pipeline.png)
-
-This pipeline includes:
-- Image preprocessing
-- Hair removal
-- Stratified train/validation split
-- Feature extraction and engineering
-- Model training with Random Forest and XGBoost
-- Evaluation using predictions on held-out data
-
-## Class Distribution
-The figure below shows the distribution of the original 9 lesion classes.
-
+## 6. Exploratory Data Analysis (EDA)
+### Class Distribution
 ![Class Distribution](5.%20Images/ML%20Data%20Viz/Class%20Distribution.png)
 
-One of the main challenges in this project is severe class imbalance. The larger classes contain far more examples than the smaller classes, which makes minority lesion types harder to classify consistently and increases the risk that a model will favor the majority classes.
+Insight:
+- The dataset is strongly imbalanced, with some classes having many more examples than others. This makes minority-class prediction more difficult and increases the importance of using evaluation metrics beyond accuracy.
 
-## Repository Structure
-```text
-1. Data/
-2. Notebooks/
-3. Models/
-4. Results : Presentations/
-5. Images/
-requirements.txt
-README.md
-```
+### Modeling Pipeline
+![Modeling Pipeline](5.%20Images/ML%20Data%20Viz/Modeling%20Pipeline.png)
 
-## Notebooks And Files
-- `2. Notebooks/Image to Tabular Pipeline.ipynb`
-  - builds the image-to-tabular feature extraction pipeline
-- `2. Notebooks/RF_9_classes.ipynb`
-  - Random Forest training and evaluation notebook
-- `2. Notebooks/xgBoost_9_classes.ipynb`
-  - XGBoost training and evaluation notebook
-- `2. Notebooks/preprocess.py`
-  - preprocessing script for image preparation
-- `3. Models/rf_9_classes_model.pkl`
-  - saved Random Forest deployment model
-- `3. Models/xgb_best_model.pkl`
-  - saved XGBoost deployment model
+Insight:
+- The project follows two main directions after preprocessing: a classical feature-engineering pipeline and a deep learning baseline path. The classical pipeline became the stronger and more stable direction for this dataset.
 
-## Random Forest Results
-The Random Forest model was evaluated with confusion matrices, ROC curves, impurity-based feature importance, permutation importance, and SHAP-based interpretation.
+## 7. Modeling Approach
+- Baseline model:
+  - A MobileNetV2 deep learning baseline was explored in earlier project phases for comparison
+- Advanced models:
+  - Random Forest
+  - XGBoost
+- Why these models were chosen:
+  - Both models perform well on structured tabular data
+  - They work well with nonlinear interactions
+  - They are more interpretable than CNN-based image models
+  - They are practical under limited data and class imbalance
 
-### Confusion Matrix
+## 8. Model Training
+- Tools used:
+  - `scikit-learn`
+  - `xgboost`
+  - `imbalanced-learn`
+  - `shap`
+  - `opencv-python`
+- Hyperparameters:
+  - Random Forest was tuned with `RandomizedSearchCV`
+  - XGBoost was tuned with a stratified split and regularized boosting settings
+- Training process:
+  - Used stratified splitting to preserve class balance
+  - Applied feature engineering to convert image information into tabular inputs
+  - Trained models on the engineered feature set
+  - Evaluated predictions using held-out validation/test data
+  - Saved trained deployment models as `.pkl` files in `3. Models/`
+
+## 9. Results
+- Metrics used:
+  - Accuracy
+  - Precision
+  - Recall
+  - F1-score
+  - Confusion matrix
+  - ROC-AUC
+
+Why these metrics were chosen:
+- Accuracy alone can be misleading on imbalanced data
+- Precision and recall help show class-specific performance
+- F1-score balances precision and recall
+- ROC-AUC helps evaluate class separation quality across thresholds
+
+### Model Comparison Table
+| Model | Setting | Reported Performance |
+|---|---|---|
+| Random Forest | Earlier 3-class experiments | About 0.79 to 0.81 accuracy |
+| XGBoost | Earlier 3-class experiments | About 0.86 accuracy |
+| Random Forest | 9-class experiment | Macro ROC-AUC about 0.885 |
+| XGBoost | 9-class experiment | Macro ROC-AUC about 0.884 |
+
+### Random Forest Visualizations
 ![RF Confusion Matrix](5.%20Images/ML%20Data%20Viz/RF%20Confusion%20Matrix.png)
 
-### ROC Curves
 ![RF ROC Curves](5.%20Images/ML%20Data%20Viz/RF%20-ROC%20Curves.png)
 
-### Top 30 Feature Importances
-![RF Top 30 Feature Importance](5.%20Images/ML%20Data%20Viz/RF%20Top%2030%20Feature%20Importance.png)
-
-### Permutation Importances
-![RF Permutation Importances](5.%20Images/ML%20Data%20Viz/RF%20-Permutation%20Importances.png)
-
-### Global SHAP Importances
-![RF Global SHAP Importances](5.%20Images/ML%20Data%20Viz/RF%20Global%20SHAP%20Importances.png)
-
-## XGBoost Results
-The XGBoost model was also evaluated with the same core metrics and feature importance plots.
-
-### Confusion Matrix
+### XGBoost Visualizations
 ![XGB Confusion Matrix](5.%20Images/ML%20Data%20Viz/XGB-%20Confusion%20Matrix.png)
 
-### ROC Curve
 ![XGB ROC Curve](5.%20Images/ML%20Data%20Viz/XGB%20-%20ROC%20Curve.png)
 
-### Top 30 Feature Importances
-![XGB Top 30 Feature Importance](5.%20Images/ML%20Data%20Viz/XGB%20-%20Top%2030%20Feature%20Importance.png)
-
-### Permutation Importance
-![XGB Permutation Importance](5.%20Images/ML%20Data%20Viz/XGB%20-%20Premutation%20Importance.png)
-
-## Key Observations
-- The classical machine learning pipeline performed strongly on structured image-derived features and consistently outperformed the early MobileNetV2 baseline explored during the project.
-- In earlier three-class experiments, XGBoost achieved about 0.86 accuracy while Random Forest achieved about 0.79 to 0.81, showing that both models were competitive but XGBoost was slightly stronger overall.
-- In later nine-class experiments, both Random Forest and XGBoost produced very similar macro ROC-AUC values of about 0.885 and 0.884, suggesting that both models captured useful class-separation patterns even in the harder multi-class setting.
-- Nevus was one of the strongest-performing classes across experiments, while some minority classes remained more difficult to separate because of limited examples and overlapping feature distributions.
-- Several misclassifications occurred between visually similar lesion types, which supports the idea that class imbalance and overlapping color patterns remain important modeling challenges.
-- Feature importance analysis showed that the models did not depend on a single dominant predictor. Instead, they relied on groups of correlated features working together.
-- Color histogram features were consistently influential, especially in earlier project phases, but later feature engineering showed that shape-based features such as asymmetry, border irregularity, radius, area, and rectangle-based measurements also became important.
-- SHAP and permutation importance helped confirm that combinations of features were more informative than any one feature by itself, which improved interpretability of the final models.
-
-## Preprocessing Improvements
-Preprocessing was a major part of the project because dermoscopic images often contain hair artifacts that interfere with feature extraction.
-
-- An earlier hair-removal method introduced noise, corrupted some images, and took about 1.5 hours to run on a small dataset.
-- The pipeline was improved by replacing that method with DullRazor, which preserves lesion structure more effectively.
-- The updated preprocessing step reduced runtime to about 3 minutes on the same smaller workload and produced cleaner images for downstream feature extraction.
-- Cleaner preprocessing improved confidence that the extracted color, texture, and shape features represented the lesion itself rather than noise.
-
-## Challenges
-- Severe class imbalance made minority classes harder to detect and evaluate fairly.
-- Some lesion classes had overlapping color and texture patterns, which increased confusion between clinically similar categories.
-- Deep learning performance was less stable in the earlier stages of the project, especially under limited data and imbalance.
-- Interpreting low individual feature-importance scores was difficult at first because many engineered features were correlated with one another.
-
-## Conclusions And Future Work
-- The project supports the idea that feature-based machine learning can be a practical and interpretable alternative to deep learning for medical image classification when data are limited or imbalanced.
-- XGBoost and Random Forest both showed that handcrafted features can capture clinically meaningful lesion information.
-- Future work includes improving feature engineering further, especially with medically informed ABCD-style features based on asymmetry, border, color, and diameter.
-- Additional imbalance-handling strategies, deeper evaluation of minority classes, and further refinement of the deployment pipeline can help strengthen model reliability.
-
-## Evaluation Metrics
-The project uses the following evaluation metrics:
-- Accuracy
-- Precision
-- Recall
-- F1-score
-- Confusion matrix
-- ROC-AUC
+## 10. Model Interpretation
+This project includes multiple model interpretation techniques:
 - Feature importance
 - Permutation importance
-- SHAP interpretation
+- SHAP values
 
-## Libraries Used
-Main libraries used in this project:
-- `pandas`
-- `numpy`
-- `matplotlib`
-- `seaborn`
-- `scikit-learn`
-- `imbalanced-learn`
-- `xgboost`
-- `shap`
-- `opencv-python`
-- `Pillow`
-- `scikit-image`
-- `mahotas`
+### Random Forest Interpretation
+![RF Top 30 Feature Importance](5.%20Images/ML%20Data%20Viz/RF%20Top%2030%20Feature%20Importance.png)
 
-Install dependencies with:
+![RF Permutation Importances](5.%20Images/ML%20Data%20Viz/RF%20-Permutation%20Importances.png)
+
+![RF Global SHAP Importances](5.%20Images/ML%20Data%20Viz/RF%20Global%20SHAP%20Importances.png)
+
+### XGBoost Interpretation
+![XGB Top 30 Feature Importance](5.%20Images/ML%20Data%20Viz/XGB%20-%20Top%2030%20Feature%20Importance.png)
+
+![XGB Permutation Importance](5.%20Images/ML%20Data%20Viz/XGB%20-%20Premutation%20Importance.png)
+
+Interpretation summary:
+- The models do not rely on one single feature
+- Groups of correlated features drive predictions together
+- Color histogram features were especially important in earlier project phases
+- Later experiments showed that shape-based features also became highly influential
+
+## 11. Key Insights
+- The classical machine learning pipeline worked better than the earlier deep learning baseline for this project setting
+- XGBoost was slightly stronger than Random Forest in earlier three-class experiments
+- In the nine-class setting, both models performed very similarly in macro ROC-AUC
+- Nevus was one of the strongest-performing classes across experiments
+- Minority classes remained harder to classify because of imbalance and overlapping feature patterns
+- The practical impact is that interpretable tree-based models can be a strong alternative when medical image data are limited, imbalanced, or noisy
+
+## 12. Conclusion
+This project shows that feature-based machine learning can classify skin lesion images effectively while remaining interpretable. Random Forest and XGBoost both performed well on tabular features extracted from dermoscopic images, and interpretation tools helped explain what drove the predictions.
+
+## 13. Future Work
+- Expand medically informed feature engineering using ABCD-style lesion features
+- Improve minority-class performance further
+- Continue refining preprocessing and feature selection
+- Compare against stronger deep learning baselines
+- Extend deployment and model evaluation workflows
+
+## 14. How to Run
+- Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Presentations
-Project presentation materials are stored in:
-- `4. Results : Presentations/`
+- Run preprocessing:
+  - Use `2. Notebooks/preprocess.py`
+  - Or open the notebooks and run preprocessing cells
 
-## Author
-Tiffany Delacruz
+- Train model:
+  - Run `2. Notebooks/RF_9_classes.ipynb`
+  - Run `2. Notebooks/xgBoost_9_classes.ipynb`
+
+- Evaluate results:
+  - Review saved plots in `5. Images/ML Data Viz/`
+  - Review saved model files in `3. Models/`
+  - Review presentation/report material in `4. Results : Presentations/`
+
+## 15. Repository Structure Explanation
+```text
+project-name/
+├── README.md
+├── requirements.txt
+├── 1. Data/
+├── 2. Notebooks/
+├── 3. Models/
+├── 4. Results : Presentations/
+└── 5. Images/
+```
+
+Folder explanation:
+- `1. Data/`
+  - dataset CSV and sample lesion images
+- `2. Notebooks/`
+  - notebooks and scripts for preprocessing, feature extraction, and model training
+- `3. Models/`
+  - saved deployment `.pkl` model files
+- `4. Results : Presentations/`
+  - presentation PDFs and result communication materials
+- `5. Images/`
+  - visual outputs including EDA, confusion matrices, ROC curves, and interpretation plots
+
+## 16. Requirements
+Install packages with:
+
+```bash
+pip install -r requirements.txt
+```
