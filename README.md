@@ -1,15 +1,12 @@
 # Skin Lesion Classification Capstone Project
 
-## 1. Project Title
-Skin Lesion Classification Using Classical Computer Vision, Random Forest, and XGBoost
-
-## 2. Business Problem / Motivation
+## 1. Business Problem / Motivation
 Early skin cancer detection matters because it can improve patient outcomes and support faster clinical decision-making. This project explores whether interpretable, feature-based machine learning can classify dermoscopic skin lesion images effectively, especially in a setting with limited data and strong class imbalance.
 
-## 3. Project Overview
+## 2. Project Overview
 This project classifies 9 skin lesion classes using a classical computer vision pipeline. Images are preprocessed, converted into tabular features, and then modeled with Random Forest and XGBoost. The main result is that the tree-based models performed strongly on structured image-derived features and provided useful interpretability through feature importance, permutation importance, and SHAP.
 
-## 4. Data
+## 3. Data
 - Source: [Kaggle Skin Cancer ISIC Dataset](https://www.kaggle.com/datasets/nodoubttome/skin-cancer9-classesisic/data)
 - Type: Dermoscopic image dataset converted into structured tabular features for modeling
 - Size: 2,357 images across 9 classes
@@ -31,7 +28,7 @@ The 9 classes are:
 - Dermatofibroma
 - Seborrheic keratosis
 
-## 5. Data Preprocessing
+## 4. Data Preprocessing
 - Cleaning steps:
   - Organized image and tabular data into a reproducible project structure
   - Applied image preprocessing before feature extraction
@@ -47,7 +44,7 @@ The 9 classes are:
   - Replaced an earlier slower and less stable filter with DullRazor
   - Improved preprocessing speed and reduced image corruption
 
-## 6. Exploratory Data Analysis (EDA)
+## 5. Exploratory Data Analysis (EDA)
 ### Class Distribution
 ![Class Distribution](5.%20Images/ML%20Data%20Viz/Class%20Distribution.png)
 
@@ -72,7 +69,7 @@ Insight:
 Insight:
 - The project follows two main directions after preprocessing: a classical feature-engineering pipeline and a deep learning baseline path. The classical pipeline became the stronger and more stable direction for this dataset.
 
-## 7. Modeling Approach
+## 6. Modeling Approach
 - Baseline model:
   - A MobileNetV2 deep learning baseline was explored in earlier project phases for comparison
 - Advanced models:
@@ -84,7 +81,7 @@ Insight:
   - They are more interpretable than CNN-based image models
   - They are practical under limited data and class imbalance
 
-## 8. Model Training
+## 7. Model Training
 - Tools used:
   - `scikit-learn`
   - `xgboost`
@@ -101,7 +98,7 @@ Insight:
   - Evaluated predictions using held-out validation/test data
   - Saved trained deployment models as `.pkl` files in `3. Models/`
 
-## 9. Results
+## 8. Results
 - Metrics used:
   - Accuracy
   - Precision
@@ -134,7 +131,7 @@ Why these metrics were chosen:
 
 ![XGB ROC Curve](5.%20Images/ML%20Data%20Viz/XGB%20-%20ROC%20Curve.png)
 
-## 10. Model Interpretation
+## 9. Model Interpretation
 This project includes multiple model interpretation techniques:
 - Feature importance
 - Permutation importance
@@ -158,7 +155,7 @@ Interpretation summary:
 - Color histogram features were especially important in earlier project phases
 - Later experiments showed that shape-based features also became highly influential
 
-## 11. Key Insights
+## 10. Key Insights
 - The classical machine learning pipeline worked better than the earlier deep learning baseline for this project setting
 - XGBoost was slightly stronger than Random Forest in earlier three-class experiments
 - In the nine-class setting, both models performed very similarly in macro ROC-AUC
@@ -166,17 +163,17 @@ Interpretation summary:
 - Minority classes remained harder to classify because of imbalance and overlapping feature patterns
 - The practical impact is that interpretable tree-based models can be a strong alternative when medical image data are limited, imbalanced, or noisy
 
-## 12. Conclusion
+## 11. Conclusion
 This project shows that feature-based machine learning can classify skin lesion images effectively while remaining interpretable. Random Forest and XGBoost both performed well on tabular features extracted from dermoscopic images, and interpretation tools helped explain what drove the predictions.
 
-## 13. Future Work
-- Expand medically informed feature engineering using ABCD-style features
+## 12. Future Work
+- Expand medically informed feature engineering using ABCD-style lesion features
 - Improve minority-class performance further
 - Continue refining preprocessing and feature selection
 - Compare against stronger deep learning baselines
 - Extend deployment and model evaluation workflows
 
-## 14. How to Run
+## 13. How to Run
 - Install dependencies:
 
 ```bash
@@ -196,7 +193,7 @@ pip install -r requirements.txt
   - Review saved model files in `3. Models/`
   - Review presentation/report material in `4. Results : Presentations/`
 
-## 15. Repository Structure Explanation
+## 14. Repository Structure Explanation
 ```text
 project-name/
 ├── README.md
@@ -220,7 +217,7 @@ Folder explanation:
 - `5. Images/`
   - visual outputs including EDA, confusion matrices, ROC curves, and interpretation plots
 
-## 16. Requirements
+## 15. Requirements
 Install packages with:
 
 ```bash
