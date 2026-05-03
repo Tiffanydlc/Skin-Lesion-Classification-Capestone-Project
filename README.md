@@ -3,11 +3,11 @@
 ## Project Overview
 This repository contains my DATA 4382 capstone project on skin lesion classification. The goal of this project is to classify skin lesion images into 9 diagnostic classes using image preprocessing, feature engineering, and machine learning models.
 
-The project compares two machine learning approaches:
+The project compares two tree-based machine learning approaches:
 - Random Forest
 - XGBoost
 
-Both models were trained on tabular features extracted from skin lesion images and evaluated using visual and quantitative performance metrics.
+These models were trained on tabular features extracted from dermoscopic images and evaluated using visual and quantitative performance metrics. Earlier project phases also compared the feature-based pipeline against a MobileNetV2 deep learning baseline to study how classical machine learning behaves under limited data and class imbalance.
 
 ## Dataset
 The dataset includes 9 lesion classes:
@@ -44,6 +44,8 @@ This pipeline includes:
 The figure below shows the distribution of the original 9 lesion classes.
 
 ![Class Distribution](5.%20Images/ML%20Data%20Viz/Class%20Distribution.png)
+
+One of the main challenges in this project is severe class imbalance. The larger classes contain far more examples than the smaller classes, which makes minority lesion types harder to classify consistently and increases the risk that a model will favor the majority classes.
 
 ## Repository Structure
 ```text
@@ -102,6 +104,36 @@ The XGBoost model was also evaluated with the same core metrics and feature impo
 
 ### Permutation Importance
 ![XGB Permutation Importance](5.%20Images/ML%20Data%20Viz/XGB%20-%20Premutation%20Importance.png)
+
+## Key Observations
+- The classical machine learning pipeline performed strongly on structured image-derived features and consistently outperformed the early MobileNetV2 baseline explored during the project.
+- In earlier three-class experiments, XGBoost achieved about 0.86 accuracy while Random Forest achieved about 0.79 to 0.81, showing that both models were competitive but XGBoost was slightly stronger overall.
+- In later nine-class experiments, both Random Forest and XGBoost produced very similar macro ROC-AUC values of about 0.885 and 0.884, suggesting that both models captured useful class-separation patterns even in the harder multi-class setting.
+- Nevus was one of the strongest-performing classes across experiments, while some minority classes remained more difficult to separate because of limited examples and overlapping feature distributions.
+- Several misclassifications occurred between visually similar lesion types, which supports the idea that class imbalance and overlapping color patterns remain important modeling challenges.
+- Feature importance analysis showed that the models did not depend on a single dominant predictor. Instead, they relied on groups of correlated features working together.
+- Color histogram features were consistently influential, especially in earlier project phases, but later feature engineering showed that shape-based features such as asymmetry, border irregularity, radius, area, and rectangle-based measurements also became important.
+- SHAP and permutation importance helped confirm that combinations of features were more informative than any one feature by itself, which improved interpretability of the final models.
+
+## Preprocessing Improvements
+Preprocessing was a major part of the project because dermoscopic images often contain hair artifacts that interfere with feature extraction.
+
+- An earlier hair-removal method introduced noise, corrupted some images, and took about 1.5 hours to run on a small dataset.
+- The pipeline was improved by replacing that method with DullRazor, which preserves lesion structure more effectively.
+- The updated preprocessing step reduced runtime to about 3 minutes on the same smaller workload and produced cleaner images for downstream feature extraction.
+- Cleaner preprocessing improved confidence that the extracted color, texture, and shape features represented the lesion itself rather than noise.
+
+## Challenges
+- Severe class imbalance made minority classes harder to detect and evaluate fairly.
+- Some lesion classes had overlapping color and texture patterns, which increased confusion between clinically similar categories.
+- Deep learning performance was less stable in the earlier stages of the project, especially under limited data and imbalance.
+- Interpreting low individual feature-importance scores was difficult at first because many engineered features were correlated with one another.
+
+## Conclusions And Future Work
+- The project supports the idea that feature-based machine learning can be a practical and interpretable alternative to deep learning for medical image classification when data are limited or imbalanced.
+- XGBoost and Random Forest both showed that handcrafted features can capture clinically meaningful lesion information.
+- Future work includes improving feature engineering further, especially with medically informed ABCD-style features based on asymmetry, border, color, and diameter.
+- Additional imbalance-handling strategies, deeper evaluation of minority classes, and further refinement of the deployment pipeline can help strengthen model reliability.
 
 ## Evaluation Metrics
 The project uses the following evaluation metrics:
