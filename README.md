@@ -1,10 +1,10 @@
 # Skin Lesion Classification Capstone Project
 
 ## Project Overview
-This repository contains my DATA 4382 capstone project on skin lesion classification. The project explores machine learning approaches for classifying skin lesion images into 9 classes using tabular features extracted from images.
+This repository contains my DATA 4382 capstone project on skin lesion classification. The project explores comparing deep learning and machine learning approaches for classifying skin lesion images.
 
 ## Project Goal
-The goal of this project is to build and evaluate models that can classify skin lesion types from image-derived features and compare model performance using standard machine learning evaluation metrics.
+The goal of this project is to build and evaluate models that can classify skin lesion types from image-derived features and compare model performance using standard evaluation metrics.
 
 ## Dataset
 - Dataset file: `1. Data/SC_Dataset_9_Classes.csv`
@@ -103,3 +103,6 @@ Additional result artifacts can be stored in:
 
 ## Author
 Tiffany Delacruz
+## Co-Authors
+Diego Maldonaldo
+Sidhantaa Sarna
