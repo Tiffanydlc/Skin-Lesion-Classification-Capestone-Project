@@ -104,6 +104,7 @@ Insight:
   - Precision
   - Recall
   - F1-score
+  - Macro F1-score
   - Confusion matrix
   - ROC-AUC
 
@@ -111,6 +112,7 @@ Why these metrics were chosen:
 - Accuracy alone can be misleading on imbalanced data
 - Precision and recall help show class-specific performance
 - F1-score balances precision and recall
+- Macro F1-score is especially useful because it gives equal weight to each class, making it more informative for an imbalanced 9-class problem
 - ROC-AUC helps evaluate class separation quality across thresholds
 
 ### Model Comparison Table
