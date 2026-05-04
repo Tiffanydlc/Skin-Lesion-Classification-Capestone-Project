@@ -123,6 +123,11 @@ Why these metrics were chosen:
 | Random Forest | 9-class experiment | Macro ROC-AUC about 0.885 |
 | XGBoost | 9-class experiment | Macro ROC-AUC about 0.884 |
 
+### Macro F1-Score Analysis
+| Metric | Why It Matters in This Project | Interpretation |
+|---|---|---|
+| Macro F1-score | This dataset is imbalanced across the 9 lesion classes, so accuracy alone can hide weak performance on smaller classes. Macro F1-score gives equal weight to every class. | A stronger Macro F1-score means the model is performing more consistently across both common and rare lesion types, which is important for a fairer clinical screening tool. |
+
 ### Random Forest Visualizations
 ![RF Confusion Matrix](5.%20Images/ML%20Data%20Viz/RF%20Confusion%20Matrix.png)
 
